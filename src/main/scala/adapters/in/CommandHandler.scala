@@ -6,7 +6,7 @@ import core.ports.RideQueryService
 class CommandHandler(service: RideQueryService) {
 
   def handle(line: String): String = {
-    val commands = line.trim.split(" ").toList
+    val commands = line.trim.split("\\s+").toList
     val firstCommand = commands.head
 
     firstCommand match {

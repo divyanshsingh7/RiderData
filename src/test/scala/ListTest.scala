@@ -1,9 +1,7 @@
-import adapters.out.InMemoryRideRepository
 import config.TestConfig
-import core.Service
 import core.model.Ride
 
-import java.time.{LocalDate, LocalDateTime, LocalTime}
+import java.time.{LocalDate, LocalTime}
 
 class ListTest extends munit.FunSuite {
 
@@ -18,26 +16,25 @@ class ListTest extends munit.FunSuite {
       ride(1, isOpen = true, waitTime = 10)
     )
     val service = TestConfig.service(fakeRides)
-    assertEquals(service.list().map((ride: Ride) => ride.rideId), List(1,2,5))
+    assertEquals(service.list().map((ride: Ride) => ride.rideId), List(1, 2, 5))
   }
 
-  // Show the date and time as well to be extra sure
   test("Returns latest record for each ride") {
     val fakeRides = List(
       ride(rideId = 3, isOpen = false, waitTime = 5, date = LocalDate.of(2026, 11, 5), time = LocalTime.of(8, 0)),
-      ride(rideId = 3, isOpen = true, waitTime = 5, date = LocalDate.of(2026, 11, 6), time = LocalTime.of(4, 0))
+      ride(rideId = 3, isOpen = true, waitTime = 5, date = LocalDate.of(2026, 11, 6), time = LocalTime.of(4, 0)),
+      ride(rideId = 3, isOpen = true, waitTime = 5, date = LocalDate.of(2026, 11, 2), time = LocalTime.of(4, 0))
     )
     val service = TestConfig.service(fakeRides)
-    assertEquals(service.list().map((ride: Ride) => ride.rideId), List(3))
+    assertEquals(service.list().map((ride: Ride) => ride.date), List(LocalDate.of(2026, 11, 6)))
   }
 
-  // Show the status of open and unknown rides
   test("Returns the list even ride is closed or have negative time") {
     val fakeRides = List(
       ride(5, isOpen = false, waitTime = 10),
       ride(2, isOpen = true, waitTime = -10)
     )
     val service = TestConfig.service(fakeRides)
-    assertEquals(service.list().map((ride: Ride) => ride.rideId), List(2,5))
+    assertEquals(service.list().map((ride: Ride) => ride.rideId), List(2, 5))
   }
 }

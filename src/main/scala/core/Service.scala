@@ -2,11 +2,12 @@ package core
 
 import core.model.Ride
 import core.ports.*
+
 import scala.collection.mutable.Map
 
-class Service (rideRepository: RideRepository) extends RideQueryService:
+class Service(rideRepository: RideRepository) extends RideQueryService:
 
-  // Helper Method to get the current state
+  // Helper Method to get the latest state of each ride
   private def currentStates(): List[Ride] = {
     val allRecords = rideRepository.findAll()
     val newest = Map[Int, Ride]()
@@ -19,8 +20,7 @@ class Service (rideRepository: RideRepository) extends RideQueryService:
         case Some(existing) =>
           if record.recordedTime.isAfter(existing.recordedTime) then
             newest(record.rideId) = record
-
-    // Passing a function as a parameter (also known as a higher-order function)
+    
     newest.values.toList.sortBy((ride: Ride) => ride.rideId)
   }
 
@@ -51,5 +51,3 @@ class Service (rideRepository: RideRepository) extends RideQueryService:
     recommendRide = recommendRide.take(3)
     recommendRide
   }
-
-

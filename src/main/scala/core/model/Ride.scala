@@ -1,17 +1,14 @@
 package core.model
 
-import java.time.{LocalDate, LocalTime, LocalDateTime}
+import java.time.{LocalDate, LocalDateTime, LocalTime}
 
 case class Ride(
                  rideId: Int,
                  rideName: String,
                  isOpen: Boolean,
-                 waitTime: Int, // None = Unknown, but see if only int could be use
+                 waitTime: Int,
                  date: LocalDate,
                  time: LocalTime
                ):
 
   def recordedTime: LocalDateTime = LocalDateTime.of(date, time)
-
-
-
